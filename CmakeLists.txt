@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 3.20)
+project(work_buddy_native LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# ---------- JNI ----------
+find_package(JNI REQUIRED)
+include_directories(${JNI_INCLUDE_DIRS})
+
+# ---------- Windows ----------
+if (WIN32)
+    add_definitions(-DWIN32_LEAN_AND_MEAN)
+endif()
+
+# ---------- Library ----------
+add_library(work_buddy_native SHARED
+    src/native_input.cpp
+)
+
+target_include_directories(work_buddy_native PRIVATE
+    ${JNI_INCLUDE_DIRS}
+    include
+)
+
+target_link_libraries(work_buddy_native
+    ${JNI_LIBRARIES}
+)
+
+# ---------- Output name ----------
+set_target_properties(work_buddy_native PROPERTIES
+    OUTPUT_NAME "work_buddy_native"
+)
